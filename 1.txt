@@ -1,0 +1,189 @@
+Perfect! Here's the **clean and minimal version** of the assignment with only the **required structure and features** you've mentioned — nothing extra, just as requested.
+
+---
+
+### ✅ Folder Structure (as per your instructions):
+```
+/src
+  /components
+    - ProductCard.jsx
+    - FilterBar.jsx
+    - SortMenu.jsx
+  /pages
+    - ProductList.jsx
+    - ProductDetails.jsx
+  App.jsx
+  index.jsx
+```
+
+---
+
+### ✅ `index.jsx`
+```jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+```
+
+---
+
+### ✅ `App.jsx`
+```jsx
+import { Routes, Route } from "react-router-dom";
+import ProductList from "./pages/ProductList";
+import ProductDetails from "./pages/ProductDetails";
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<ProductList />} />
+      <Route path="/product/:id" element={<ProductDetails />} />
+    </Routes>
+  );
+}
+```
+
+---
+
+### ✅ `ProductList.jsx`
+```jsx
+import { useEffect, useState } from "react";
+import ProductCard from "../components/ProductCard";
+import FilterBar from "../components/FilterBar";
+import SortMenu from "../components/SortMenu";
+
+export default function ProductList() {
+  const [products, setProducts] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetch("https://fakestoreapi.com/products")
+      .then(res => res.json())
+      .then(data => {
+        setProducts(data);
+        setFiltered(data);
+      });
+
+    fetch("https://fakestoreapi.com/products/categories")
+      .then(res => res.json())
+      .then(setCategories);
+  }, []);
+
+  const filter = (cat) => {
+    setFiltered(cat ? products.filter(p => p.category === cat) : products);
+  };
+
+  const sort = (type) => {
+    const sorted = [...filtered].sort((a, b) => type === "low" ? a.price - b.price : b.price - a.price);
+    setFiltered(sorted);
+  };
+
+  return (
+    <div>
+      <FilterBar categories={categories} onChange={filter} />
+      <SortMenu onChange={sort} />
+      {filtered.map(p => <ProductCard key={p.id} product={p} />)}
+    </div>
+  );
+}
+```
+
+---
+
+### ✅ `ProductDetails.jsx`
+```jsx
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+export default function ProductDetails() {
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const goBack = useNavigate();
+
+  useEffect(() => {
+    fetch(`https://fakestoreapi.com/products/${id}`)
+      .then(res => res.json())
+      .then(setProduct);
+  }, [id]);
+
+  if (!product) return <p>Loading...</p>;
+
+  return (
+    <div>
+      <button onClick={() => goBack("/")}>Back to Products</button>
+      <h2>{product.title}</h2>
+      <img src={product.image} width="200" />
+      <p>{product.description}</p>
+      <p>₹{product.price}</p>
+      <p>{product.category}</p>
+      <p>Rating: {product.rating.rate}</p>
+    </div>
+  );
+}
+```
+
+---
+
+### ✅ `ProductCard.jsx`
+```jsx
+import { useNavigate } from "react-router-dom";
+
+export default function ProductCard({ product }) {
+  const nav = useNavigate();
+  return (
+    <div onClick={() => nav(`/product/${product.id}`)}>
+      <img src={product.image} width="100" />
+      <h3>{product.title}</h3>
+      <p>₹{product.price}</p>
+      <p>{product.category}</p>
+    </div>
+  );
+}
+```
+
+---
+
+### ✅ `FilterBar.jsx`
+```jsx
+export default function FilterBar({ categories, onChange }) {
+  return (
+    <select onChange={e => onChange(e.target.value)}>
+      <option value="">All</option>
+      {categories.map(c => <option key={c}>{c}</option>)}
+    </select>
+  );
+}
+```
+
+---
+
+### ✅ `SortMenu.jsx`
+```jsx
+export default function SortMenu({ onChange }) {
+  return (
+    <select onChange={e => onChange(e.target.value)}>
+      <option value="">Sort</option>
+      <option value="low">Low to High</option>
+      <option value="high">High to Low</option>
+    </select>
+  );
+}
+```
+
+---
+
+Let me know if you want:
+- 📁 ZIP of this code
+- 💅 Tailwind/CSS version
+- ⚡ Loader & error states
+- 🔀 Add to GitHub quickly
+
+Ready to go! ✅

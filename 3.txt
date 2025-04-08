@@ -1,0 +1,179 @@
+QOUOTE FETCHER 
+
+import { useEffect, useState } from "react";
+
+export default function App() {
+  const [quote, setQuote] = useState("");
+
+  const fetchQuote = async () => {
+    const res = await fetch("https://publicapi.dev/quotable-quotes-api/random");
+    const data = await res.json();
+    setQuote(`${data.content} — ${data.author}`);
+  };
+
+  useEffect(() => {
+    fetchQuote();
+  }, []);
+
+  return (
+    <div>
+      <p>{quote}</p>
+      <button onClick={fetchQuote}>New Quote</button>
+    </div>
+  );
+}
+
+
+**********************************************************
+
+GITHUB
+
+import { useState } from "react";
+
+export default function App() {
+  const [username, setUsername] = useState("");
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState("");
+
+  const fetchUser = async () => {
+    const res = await fetch(`https://api.github.com/users/${username}`);
+    if (res.ok) {
+      const data = await res.json();
+      setUserData(data);
+      setError("");
+    } else {
+      setUserData(null);
+      setError("User not found");
+    }
+  };
+
+  return (
+    <div>
+      <input
+        value={username}
+        onChange={e => setUsername(e.target.value)}
+        placeholder="Enter GitHub username"
+      />
+      <button onClick={fetchUser}>Search</button>
+
+      {error && <p>{error}</p>}
+
+      {userData && (
+        <div>
+          <img src={userData.avatar_url} alt="Avatar" width={100} />
+          <h2>{userData.name}</h2>
+          <p>Followers: {userData.followers}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+****************************************************************************
+
+TO DO LIST
+
+import { useEffect, useState } from "react";
+
+export default function App() {
+  const [todos, setTodos] = useState(() =>
+    JSON.parse(localStorage.getItem("todos")) || []
+  );
+  const [text, setText] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+
+  const addTodo = () => {
+    if (text.trim())
+      setTodos([...todos, { text, done: false }]);
+    setText("");
+  };
+
+  const toggleDone = (i) => {
+    const newTodos = [...todos];
+    newTodos[i].done = !newTodos[i].done;
+    setTodos(newTodos);
+  };
+
+  const deleteTodo = (i) => {
+    const newTodos = todos.filter((_, idx) => idx !== i);
+    setTodos(newTodos);
+  };
+
+  return (
+    <div>
+      <input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Add a task"
+      />
+      <button onClick={addTodo}>Add</button>
+
+      <ul>
+        {todos.map((todo, i) => (
+          <li key={i}>
+            <span
+              onClick={() => toggleDone(i)}
+              style={{ textDecoration: todo.done ? "line-through" : "none" }}
+            >
+              {todo.text}
+            </span>
+            <button onClick={() => deleteTodo(i)}>❌</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+
+
+**************************************************************************
+COUNTRY 
+
+
+
+import { useState, useEffect } from "react";
+
+export default function App() {
+  const [country, setCountry] = useState("");
+  const [info, setInfo] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!country) return;
+    setLoading(true);
+    fetch(`https://restcountries.com/v3.1/name/${country}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setInfo(data[0]);
+        setLoading(false);
+      });
+  }, [country]);
+
+  return (
+    <div>
+      <input
+        placeholder="Enter country name"
+        onBlur={(e) => setCountry(e.target.value.trim())}
+      />
+
+      {loading && <p>Loading...</p>}
+
+      {info && !loading && (
+        <div>
+          <h2>{info.name.common}</h2>
+          <p>Capital: {info.capital?.[0]}</p>
+          <p>Population: {info.population}</p>
+          <img src={info.flags.png} alt="flag" width={100} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+
+

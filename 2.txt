@@ -1,0 +1,36 @@
+ Filter Users List with useMemo
+jsx
+Copy
+Edit
+import React, { useState, useMemo } from 'react';
+
+function App() {
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  // Generate a large list of user names
+  const users = Array.from({ length: 10000 }, (_, index) => `User${index + 1}`);
+  
+  // Memoize the filtered list to optimize filtering performance
+  const filteredUsers = useMemo(() => 
+    users.filter(name => name.toLowerCase().includes(searchTerm.toLowerCase())), 
+    [searchTerm]
+  );
+
+  return (
+    <div>
+      <input 
+        type="text" 
+        placeholder="Search users..." 
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <ul>
+        {filteredUsers.map((user, index) => (
+          <li key={index}>{user}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;

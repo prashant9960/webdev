@@ -1,0 +1,34 @@
+ Minimal Lazy Load Example
+jsx
+Copy
+Edit
+// App.js
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+const Dashboard = lazy(() => import('./Dashboard'));
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+jsx
+Copy
+Edit
+// Dashboard.js
+import React from 'react';
+
+function Dashboard() {
+  return <div>Dashboard Loaded</div>;
+}
+
+export default Dashboard;

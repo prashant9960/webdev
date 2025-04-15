@@ -1,0 +1,29 @@
+Avoid Inline Function (useCallback)
+jsx
+Copy
+Edit
+import React, { useState, useCallback } from 'react';
+
+function App() {
+  const [items, setItems] = useState([1, 2, 3]);
+
+  // Define the delete handler using useCallback
+  const handleDelete = useCallback((id) => {
+    setItems(prevItems => prevItems.filter(item => item !== id));
+  }, []);
+
+  return (
+    <div>
+      <ul>
+        {items.map(item => (
+          <li key={item}>
+            Item {item} 
+            <button onClick={() => handleDelete(item)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;

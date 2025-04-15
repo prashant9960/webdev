@@ -1,0 +1,53 @@
+Toggle Sidebar with Context
+jsx
+Copy
+Edit
+// SidebarContext.js
+import React, { createContext, useState } from 'react';
+
+export const SidebarContext = createContext();
+
+export function SidebarProvider({ children }) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+
+  return (
+    <SidebarContext.Provider value={{ isSidebarOpen, toggleSidebar }}>
+      {children}
+    </SidebarContext.Provider>
+  );
+}
+jsx
+Copy
+Edit
+// Sidebar.js
+import React, { useContext } from 'react';
+import { SidebarContext } from './SidebarContext';
+
+function Sidebar() {
+  const { isSidebarOpen } = useContext(SidebarContext);
+  return isSidebarOpen ? <div className="sidebar">Sidebar Content</div> : null;
+}
+
+export default Sidebar;
+jsx
+Copy
+Edit
+// App.js
+import React, { useContext } from 'react';
+import { SidebarProvider, SidebarContext } from './SidebarContext';
+import Sidebar from './Sidebar';
+
+function App() {
+  const { toggleSidebar } = useContext(SidebarContext);
+
+  return (
+    <SidebarProvider>
+      <button onClick={toggleSidebar}>Toggle Sidebar</button>
+      <Sidebar />
+    </SidebarProvider>
+  );
+}
+
+export default App;

@@ -1,0 +1,32 @@
+Memoized Fibonacci with useMemo
+jsx
+Copy
+Edit
+import React, { useState, useMemo } from 'react';
+
+function App() {
+  const [n, setN] = useState(0);
+
+  // Expensive Fibonacci calculation (recursive approach)
+  const fibonacci = (n) => {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+  };
+
+  // Memoize the Fibonacci result to avoid re-calculating unless 'n' changes
+  const fibResult = useMemo(() => fibonacci(n), [n]);
+
+  return (
+    <div>
+      <input
+        type="number"
+        value={n}
+        onChange={(e) => setN(Number(e.target.value))}
+        placeholder="Enter a number"
+      />
+      <p>Fibonacci of {n} is: {fibResult}</p>
+    </div>
+  );
+}
+
+export default App;

@@ -1,0 +1,45 @@
+ Minimal Theme Context Example
+jsx
+Copy
+Edit
+// ThemeContext.js
+import React, { createContext, useState } from 'react';
+
+export const ThemeContext = createContext();
+
+export function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState('light');
+  const toggleTheme = () => setTheme(t => (t === 'light' ? 'dark' : 'light'));
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+jsx
+Copy
+Edit
+// App.js
+import React, { useContext } from 'react';
+import { ThemeProvider, ThemeContext } from './ThemeContext';
+
+function Child() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  return (
+    <div>
+      <p>Theme: {theme}</p>
+      <button onClick={toggleTheme}>Toggle</button>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <Child />
+    </ThemeProvider>
+  );
+}
+
+export default App;

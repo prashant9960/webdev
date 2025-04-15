@@ -1,0 +1,36 @@
+ Memoized Complex Sort using useMemo
+jsx
+Copy
+Edit
+import React, { useState, useMemo } from 'react';
+
+function App() {
+  const [sortBy, setSortBy] = useState('name');
+  const data = [
+    { name: 'John', age: 30 },
+    { name: 'Jane', age: 25 },
+    { name: 'Alex', age: 35 },
+  ];
+
+  const sortedData = useMemo(() => {
+    return data.sort((a, b) => {
+      if (sortBy === 'name') return a.name.localeCompare(b.name);
+      if (sortBy === 'age') return a.age - b.age;
+      return 0;
+    });
+  }, [sortBy]);
+
+  return (
+    <div>
+      <button onClick={() => setSortBy('name')}>Sort by Name</button>
+      <button onClick={() => setSortBy('age')}>Sort by Age</button>
+      <ul>
+        {sortedData.map((item, index) => (
+          <li key={index}>{item.name} - {item.age}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;

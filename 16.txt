@@ -1,0 +1,19 @@
+Count Renders with useRef
+jsx
+Copy
+Edit
+import React, { useRef } from 'react';
+
+function App() {
+  const renderCount = useRef(0);
+
+  renderCount.current += 1;
+
+  return (
+    <div>
+      <p>Component Rendered: {renderCount.current} times</p>
+    </div>
+  );
+}
+
+export default App;

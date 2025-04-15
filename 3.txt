@@ -1,0 +1,38 @@
+Debounced Search with useRef
+jsx
+Copy
+Edit
+import React, { useState, useRef } from 'react';
+
+function App() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const timerRef = useRef(null);
+
+  // Handle the input change with debouncing
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+
+    // Clear the existing timeout on every keystroke
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    // Set a new timeout to delay the search
+    timerRef.current = setTimeout(() => {
+      console.log('API call for:', e.target.value);  // Simulate API call
+    }, 500);  // 500ms delay
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleSearch}
+        placeholder="Search..."
+      />
+    </div>
+  );
+}
+
+export default App;

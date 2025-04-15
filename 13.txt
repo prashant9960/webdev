@@ -1,0 +1,31 @@
+ Dynamic Form with useRef
+jsx
+Copy
+Edit
+import React, { useRef } from 'react';
+
+function App() {
+  const inputsRef = useRef([]);
+
+  const addInput = () => {
+    inputsRef.current.push(React.createRef()); // Dynamically add a new ref
+  };
+
+  const focusInput = (index) => {
+    inputsRef.current[index].current.focus(); // Focus a specific input
+  };
+
+  return (
+    <div>
+      <button onClick={addInput}>Add Input</button>
+      {inputsRef.current.map((inputRef, index) => (
+        <div key={index}>
+          <input ref={inputRef} placeholder={`Input ${index + 1}`} />
+          <button onClick={() => focusInput(index)}>Focus Input {index + 1}</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default App;

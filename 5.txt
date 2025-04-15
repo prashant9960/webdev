@@ -1,0 +1,39 @@
+ Stopwatch with useRef
+jsx
+Copy
+Edit
+import React, { useState, useRef } from 'react';
+
+function Stopwatch() {
+  const [time, setTime] = useState(0);  // To track the stopwatch time
+  const intervalRef = useRef(null);  // To store the interval ID
+
+  const start = () => {
+    if (intervalRef.current) return;  // Prevent multiple intervals
+    intervalRef.current = setInterval(() => {
+      setTime((prevTime) => prevTime + 1);  // Increment time every second
+    }, 1000);
+  };
+
+  const pause = () => {
+    clearInterval(intervalRef.current);  // Stop the interval
+    intervalRef.current = null;  // Clear the interval reference
+  };
+
+  const reset = () => {
+    clearInterval(intervalRef.current);  // Stop the interval
+    intervalRef.current = null;  // Clear the interval reference
+    setTime(0);  // Reset time to 0
+  };
+
+  return (
+    <div>
+      <p>{time} seconds</p>
+      <button onClick={start}>Start</button>
+      <button onClick={pause}>Pause</button>
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
+}
+
+export default Stopwatch;

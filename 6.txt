@@ -1,0 +1,24 @@
+Callback Optimizer using useCallback and React.memo
+
+import React, { useState, useCallback } from 'react';
+
+const Child = React.memo(({ onAction }) => {
+  return <button onClick={onAction}>Click</button>;
+});
+
+function Parent() {
+  const [count, setCount] = useState(0);
+
+  const handleAction = useCallback(() => {
+    console.log('Action triggered');
+  }, []);
+
+  return (
+    <div>
+      <button onClick={() => setCount(count + 1)}>Update Parent</button>
+      <Child onAction={handleAction} />
+    </div>
+  );
+}
+
+export default Parent;
